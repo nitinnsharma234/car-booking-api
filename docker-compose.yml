@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "80:80" # Exposes the gateway on localhost:8080
+    depends_on:
+      - user-service
+      - booking
+    networks:
+      - car-rental-net
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - "4001:4001"
+    # environment:
+    #   - PORT=4001
+    networks:
+      - car-rental-net
+
+  booking:
+    build: ./booking-service
+    container_name: booking-service
+    ports:
+      - "4002:4002"
+    # environment:
+    #   - PORT=4002
+    networks:
+      - car-rental-net
+
+networks:
+  car-rental-net:
+    driver: bridge
